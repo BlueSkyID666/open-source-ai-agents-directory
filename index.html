@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Open Source AI Agents Directory</title>
+<style>
+  :root{
+    --bg:#0b0d12;
+    --panel:#12151c;
+    --panel-2:#171b24;
+    --border:#242938;
+    --text:#e8eaf0;
+    --text-dim:#9aa1b4;
+    --text-faint:#666e82;
+    --accent:#7c9eff;
+    --accent-soft:rgba(124,158,255,0.12);
+    --focus:#7c9eff;
+    --radius:12px;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f6f7fb;
+      --panel:#ffffff;
+      --panel-2:#f0f1f6;
+      --border:#e2e5ee;
+      --text:#1b1e27;
+      --text-dim:#5b6274;
+      --text-faint:#8d93a3;
+      --accent:#3b5fe2;
+      --accent-soft:rgba(59,95,226,0.08);
+    }
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.5;
+    min-height:100vh;
+  }
+  .wrap{max-width:1100px;margin:0 auto;padding:40px 24px 80px;}
+  header{margin-bottom:32px;}
+  h1{
+    font-size:clamp(28px,4vw,38px);
+    margin:0 0 8px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+  }
+  .subtitle{color:var(--text-dim);font-size:16px;max-width:640px;margin:0 0 4px;}
+  .meta-line{color:var(--text-faint);font-size:13px;margin-top:10px;}
+  .meta-line a{color:var(--text-faint);}
+
+  .controls{
+    position:sticky;top:0;
+    background:var(--bg);
+    padding:16px 0;
+    z-index:10;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    border-bottom:1px solid var(--border);
+    margin-bottom:24px;
+  }
+  .search-box{
+    flex:1 1 240px;
+    position:relative;
+  }
+  .search-box input{
+    width:100%;
+    padding:11px 14px 11px 38px;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text);
+    font-size:14px;
+    outline:none;
+  }
+  .search-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft);}
+  .search-box svg{
+    position:absolute;left:12px;top:50%;transform:translateY(-50%);
+    width:16px;height:16px;color:var(--text-faint);pointer-events:none;
+  }
+  .count-pill{
+    font-size:12.5px;
+    color:var(--text-dim);
+    background:var(--panel-2);
+    border:1px solid var(--border);
+    padding:6px 12px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;}
+  .chip{
+    font-size:13px;
+    padding:6px 13px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text-dim);
+    cursor:pointer;
+    user-select:none;
+    transition:border-color .15s, color .15s, background .15s;
+  }
+  .chip:hover{color:var(--text);border-color:var(--text-faint);}
+  .chip.active{
+    background:var(--accent-soft);
+    border-color:var(--accent);
+    color:var(--accent);
+    font-weight:600;
+  }
+
+  .category{margin-bottom:36px;}
+  .category-title{
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--text-faint);
+    font-weight:700;
+    margin:0 0 14px;
+    padding-bottom:8px;
+    border-bottom:1px solid var(--border);
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:12px;
+  }
+  .card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    text-decoration:none;
+    color:inherit;
+    transition:border-color .15s, transform .1s;
+  }
+  .card:hover{border-color:var(--accent);transform:translateY(-1px);}
+  .card:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+  .card-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .card-name{font-size:15px;font-weight:650;color:var(--text);}
+  .card-arrow{color:var(--text-faint);font-size:14px;flex-shrink:0;}
+  .card-desc{font-size:13.5px;color:var(--text-dim);flex:1;}
+  .card-repo{font-size:12px;color:var(--text-faint);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;}
+
+  .empty-state{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--text-faint);
+    font-size:14px;
+  }
+
+  footer{
+    margin-top:48px;
+    padding-top:20px;
+    border-top:1px solid var(--border);
+    color:var(--text-faint);
+    font-size:12.5px;
+  }
+  footer a{color:var(--text-faint);}
+
+  @media (max-width:520px){
+    .wrap{padding:24px 16px 60px;}
+    .controls{position:static;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Open Source AI Agents Directory</h1>
+    <p class="subtitle">A curated collection of open-source AI agent projects across industries — search, filter, and jump straight to the code.</p>
+    <p class="meta-line">Compiled August 2026 · inspired by <a href="https://github.com/ashishpatel26/500-AI-Agents-Projects" target="_blank" rel="noopener">ashishpatel26/500-AI-Agents-Projects</a>, rebuilt independently.</p>
+  </header>
+
+  <div class="controls">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search" type="text" placeholder="Search projects, e.g. &quot;healthcare&quot;, &quot;trading&quot;, &quot;LangGraph&quot;…" autocomplete="off">
+    </div>
+    <span class="count-pill" id="count-pill">— projects</span>
+  </div>
+
+  <div class="chips" id="chips"></div>
+
+  <div id="results"></div>
+  <div class="empty-state" id="empty" style="display:none;">No projects match your search. Try a different term or clear the filter.</div>
+
+  <footer>
+    Descriptions and star counts change frequently — click through to each repo for the current state. This directory (curation &amp; write-ups) is released CC0; linked projects keep their own licenses.
+  </footer>
+</div>
+
+<script>
+const DATA = [
+  {cat:"Agent Frameworks & Orchestration", name:"CrewAI", repo:"crewAIInc/crewAI", desc:"Framework for orchestrating role-playing, autonomous agents that collaborate as a \"crew\" on complex tasks.", url:"https://github.com/crewAIInc/crewAI"},
+  {cat:"Agent Frameworks & Orchestration", name:"LangGraph", repo:"langchain-ai/langgraph", desc:"Low-level orchestration library from the LangChain team for building stateful, multi-agent workflows as graphs.", url:"https://github.com/langchain-ai/langgraph"},
+  {cat:"Agent Frameworks & Orchestration", name:"AutoGen", repo:"microsoft/autogen", desc:"Microsoft's framework for building multi-agent conversational AI applications.", url:"https://github.com/microsoft/autogen"},
+  {cat:"Agent Frameworks & Orchestration", name:"AutoGPT", repo:"Significant-Gravitas/AutoGPT", desc:"One of the original autonomous-agent projects; build, deploy, and run continuous AI agent workflows.", url:"https://github.com/Significant-Gravitas/AutoGPT"},
+  {cat:"Agent Frameworks & Orchestration", name:"MetaGPT", repo:"geekan/MetaGPT", desc:"Multi-agent framework assigning roles (PM, architect, engineer) to simulate a software company.", url:"https://github.com/geekan/MetaGPT"},
+
+  {cat:"Coding & Developer Agents", name:"OpenHands", repo:"OpenHands/OpenHands", desc:"Self-hosted control center for running coding agents across local, remote, and cloud backends.", url:"https://github.com/OpenHands/OpenHands"},
+  {cat:"Coding & Developer Agents", name:"Aider", repo:"Aider-AI/aider", desc:"AI pair-programming agent that edits code directly in your local git repo from the terminal.", url:"https://github.com/Aider-AI/aider"},
+  {cat:"Coding & Developer Agents", name:"SWE-agent", repo:"princeton-nlp/SWE-agent", desc:"Agent from Princeton NLP that autonomously fixes GitHub issues and resolves real-world bugs.", url:"https://github.com/princeton-nlp/SWE-agent"},
+  {cat:"Coding & Developer Agents", name:"Open Interpreter", repo:"openinterpreter/openinterpreter", desc:"Coding agent harness optimized for low-cost/open models (Kimi, DeepSeek, etc.), forked from OpenAI's Codex agent design.", url:"https://github.com/openinterpreter/openinterpreter"},
+
+  {cat:"Healthcare & Medical", name:"Awesome Medical AI", repo:"juneyaooo/awesome-medical-ai", desc:"Curated list of open-source medical and healthcare AI projects: LLMs, imaging, multi-agent clinical systems.", url:"https://github.com/juneyaooo/awesome-medical-ai"},
+  {cat:"Healthcare & Medical", name:"Awesome AI Agents for Healthcare", repo:"AgenticHealthAI/Awesome-AI-Agents-for-Healthcare", desc:"Actively maintained tracker of the latest agentic-AI research and tools for healthcare.", url:"https://github.com/AgenticHealthAI/Awesome-AI-Agents-for-Healthcare"},
+  {cat:"Healthcare & Medical", name:"AI Agents for Medical Diagnostics", repo:"ahmadvh/AI-Agents-for-Medical-Diagnostics", desc:"Specialized LLM agents simulating a multidisciplinary panel of clinicians for complex cases.", url:"https://github.com/ahmadvh/AI-Agents-for-Medical-Diagnostics"},
+  {cat:"Healthcare & Medical", name:"Healthcare Agent (List)", repo:"aiagenta2z/HealthcareAgent", desc:"Curated list of AI agents for healthcare plus common agentic-AI API interfaces.", url:"https://github.com/aiagenta2z/HealthcareAgent"},
+
+  {cat:"Finance & Trading", name:"FinRobot", repo:"AI4Finance-Foundation/FinRobot", desc:"Open-source AI agent platform for financial applications, built on LLMs.", url:"https://github.com/AI4Finance-Foundation/FinRobot"},
+  {cat:"Finance & Trading", name:"TradingAgents", repo:"TauricResearch/TradingAgents", desc:"Multi-agent LLM framework simulating a trading firm's research, risk, and trading desks.", url:"https://github.com/TauricResearch/TradingAgents"},
+  {cat:"Finance & Trading", name:"AI Financial Agent", repo:"virattt/ai-financial-agent", desc:"Investment-research agent that pulls filings, financials, and market data to answer research questions.", url:"https://github.com/virattt/ai-financial-agent"},
+  {cat:"Finance & Trading", name:"Multi-Agent AI Finance Assistant", repo:"vansh-121/Multi-Agent-AI-Finance-Assistant", desc:"Multi-agent platform for financial analysis and decision support using LLMs and financial algorithms.", url:"https://github.com/vansh-121/Multi-Agent-AI-Finance-Assistant"},
+  {cat:"Finance & Trading", name:"Awesome AI in Finance", repo:"georgezouq/awesome-ai-in-finance", desc:"Curated list of LLMs, deep-learning strategies, and tools for financial markets.", url:"https://github.com/georgezouq/awesome-ai-in-finance"},
+
+  {cat:"Customer Service & Support", name:"Agent Desk", repo:"huabeitech/agent-desk", desc:"Open-source AI-first customer support system with human-ready operations.", url:"https://github.com/huabeitech/agent-desk"},
+  {cat:"Customer Service & Support", name:"AI Customer Service Agent", repo:"Bhavik-Jikadara/ai-customer-service-agent", desc:"Production-ready support agent with multi-step workflows, tool integration, and real-time monitoring.", url:"https://github.com/Bhavik-Jikadara/ai-customer-service-agent"},
+  {cat:"Customer Service & Support", name:"OpenAI Support Agent Demo", repo:"openai/openai-support-agent-demo", desc:"Reference support agent using Next.js and the OpenAI Responses API with file search.", url:"https://github.com/openai/openai-support-agent-demo"},
+
+  {cat:"Education & Tutoring", name:"Open Tutor AI (CE)", repo:"Open-TutorAi/open-tutor-ai-CE", desc:"Open-source, collaborative AI-powered educational platform.", url:"https://github.com/Open-TutorAi/open-tutor-ai-CE"},
+  {cat:"Education & Tutoring", name:"AITutorAgent", repo:"Ebimsv/AITutorAgent", desc:"Interactive LangGraph-based tutoring system teaching any subject via structured lessons and evaluation.", url:"https://github.com/Ebimsv/AITutorAgent"},
+  {cat:"Education & Tutoring", name:"Tutor Multi-AI-Agent", repo:"samrathreddy/Tutor-multi-ai-agent", desc:"Multi-agent, multi-turn tutoring system specialized in math and physics, built on Gemini.", url:"https://github.com/samrathreddy/Tutor-multi-ai-agent"},
+  {cat:"Education & Tutoring", name:"Awesome AI/LLM for Education", repo:"GeminiLight/awesome-ai-llm4education", desc:"Curated academic paper list on AI and LLMs applied to education.", url:"https://github.com/GeminiLight/awesome-ai-llm4education"},
+
+  {cat:"Legal", name:"LawGlance", repo:"lawglance/lawglance", desc:"Free, open-source RAG-based AI legal assistant.", url:"https://github.com/lawglance/lawglance"},
+  {cat:"Legal", name:"AgentCounsel", repo:"zgbrenner/agentcounsel", desc:"Open-source, model-agnostic AI skills built specifically for legal teams.", url:"https://github.com/zgbrenner/agentcounsel"},
+  {cat:"Legal", name:"LawAgent (List)", repo:"AI-Hub-Admin/LawAgent", desc:"Curated list of law and legal AI agent resources.", url:"https://github.com/AI-Hub-Admin/LawAgent"},
+  {cat:"Legal", name:"lq-ai", repo:"LegalQuants/lq-ai", desc:"Open-source, bring-your-own-key AI tooling for legal teams that keeps data under your control.", url:"https://github.com/LegalQuants/lq-ai"},
+
+  {cat:"HR & Recruiting", name:"Hiring Agent", repo:"interviewstreet/hiring-agent", desc:"AI agent that evaluates and scores resumes against a role.", url:"https://github.com/interviewstreet/hiring-agent"},
+  {cat:"HR & Recruiting", name:"AI Recruitment Agent", repo:"Ancastal/AI-Recruitment-Agent", desc:"Multi-agent recruiting assistant (built on AutoGen) automating resume screening and interview prep.", url:"https://github.com/Ancastal/AI-Recruitment-Agent"},
+  {cat:"HR & Recruiting", name:"AI-Based Recruitment System", repo:"manthan89-py/AI-Based-Recruitment-System", desc:"End-to-end AI system to accelerate hiring for HR and technical recruiters.", url:"https://github.com/manthan89-py/AI-Based-Recruitment-System"},
+  {cat:"HR & Recruiting", name:"FoloUp", repo:"FoloUp/FoloUp", desc:"Self-hosted, AI-powered voice interviewer for candidate screening.", url:"https://github.com/FoloUp/FoloUp"},
+  {cat:"HR & Recruiting", name:"career-ops", repo:"santifer/career-ops", desc:"Open-source AI job search agent: scans portals, scores listings, tailors your CV, tracks applications.", url:"https://github.com/santifer/career-ops"},
+
+  {cat:"Retail & E-commerce", name:"E-commerce Agents", repo:"nitin27may/e-commerce-agents", desc:"Six specialized agents (discovery, orders, pricing, reviews, inventory, support) via the A2A protocol.", url:"https://github.com/nitin27may/e-commerce-agents"},
+  {cat:"Retail & E-commerce", name:"Retail Shopping Assistant", repo:"NVIDIA-AI-Blueprints/retail-shopping-assistant", desc:"NVIDIA's LangGraph-based blueprint for a multi-agent retail shopping advisor with image search.", url:"https://github.com/NVIDIA-AI-Blueprints/retail-shopping-assistant"},
+  {cat:"Retail & E-commerce", name:"Enthusiast", repo:"upsidelab/enthusiast", desc:"Open-source AI agent purpose-built for e-commerce merchandising and operations.", url:"https://github.com/upsidelab/enthusiast"},
+  {cat:"Retail & E-commerce", name:"Shopping AI Agent (LangGraph.js)", repo:"redis-developer/shopping-ai-agent-langgraph-js-demo", desc:"Grocery shopping assistant with recipe tools, product search, and semantic caching on Redis.", url:"https://github.com/redis-developer/shopping-ai-agent-langgraph-js-demo"},
+
+  {cat:"Marketing, SEO & Content", name:"AI Marketing Skills", repo:"superamped/ai-marketing-skills", desc:"Open-source marketing skills for coding agents: SEO, copywriting, competitor research, ad campaigns.", url:"https://github.com/superamped/ai-marketing-skills"},
+  {cat:"Marketing, SEO & Content", name:"Digital Marketing Pro", repo:"indranilbanerjee/digital-marketing-pro", desc:"Open-source marketing OS covering strategy, SEO, AEO/GEO, paid media, content, CRM, and analytics.", url:"https://github.com/indranilbanerjee/digital-marketing-pro"},
+  {cat:"Marketing, SEO & Content", name:"Citedy SEO Agent", repo:"citedy/citedy-seo-agent", desc:"SEO content-automation agent: trend scouting, competitor analysis, multi-language article generation.", url:"https://github.com/citedy/citedy-seo-agent"},
+  {cat:"Marketing, SEO & Content", name:"Marketing Skills", repo:"kostja94/marketing-skills", desc:"160+ open-source agent skills for SEO, social, content, and paid ads across 40+ page types.", url:"https://github.com/kostja94/marketing-skills"},
+
+  {cat:"Personal Productivity & Assistants", name:"Open Personal Agent", repo:"NevaMind-AI/open-personal-agent", desc:"First open-sourced fully personalized agent framework.", url:"https://github.com/NevaMind-AI/open-personal-agent"},
+  {cat:"Personal Productivity & Assistants", name:"GAIA", repo:"theexperiencecompany/gaia", desc:"Proactive personal AI assistant and companion for daily productivity.", url:"https://github.com/theexperiencecompany/gaia"},
+
+  {cat:"Research & Data Analysis", name:"Open Deep Research", repo:"nickscamara/open-deep-research", desc:"Open-source clone of \"deep research\" agents; reasons over web data extracted with Firecrawl.", url:"https://github.com/nickscamara/open-deep-research"},
+  {cat:"Research & Data Analysis", name:"Awesome AI Agents (Jenqyang)", repo:"Jenqyang/Awesome-AI-Agents", desc:"Collection of autonomous, LLM-powered agents spanning research, coding, and productivity.", url:"https://github.com/Jenqyang/Awesome-AI-Agents"},
+  {cat:"Research & Data Analysis", name:"AI Research SKILLs", repo:"orchestra-research/AI-research-SKILLs", desc:"Open-source library of research/engineering skills that turn any coding agent into a research agent.", url:"https://github.com/orchestra-research/AI-research-SKILLs"},
+
+  {cat:"Awesome Lists (Meta)", name:"Awesome AI Agents 2026 (caramaschiHG)", repo:"caramaschiHG/awesome-ai-agents-2026", desc:"300+ resources across 20+ categories of AI agents, frameworks, and tools; updated monthly.", url:"https://github.com/caramaschiHG/awesome-ai-agents-2026"},
+  {cat:"Awesome Lists (Meta)", name:"Awesome AI Agents 2026 (ARUNAGIRINATHAN-K)", repo:"ARUNAGIRINATHAN-K/awesome-ai-agents-2026", desc:"Another actively maintained roundup of the AI agent landscape for 2026.", url:"https://github.com/ARUNAGIRINATHAN-K/awesome-ai-agents-2026"},
+  {cat:"Awesome Lists (Meta)", name:"Awesome Agents (kyrolabs)", repo:"kyrolabs/awesome-agents", desc:"General-purpose curated list of AI agents.", url:"https://github.com/kyrolabs/awesome-agents"},
+];
+
+const CATS = [...new Set(DATA.map(d => d.cat))];
+let activeCat = "All";
+let query = "";
+
+const chipsEl = document.getElementById('chips');
+const resultsEl = document.getElementById('results');
+const emptyEl = document.getElementById('empty');
+const countEl = document.getElementById('count-pill');
+const searchEl = document.getElementById('search');
+
+function renderChips(){
+  const all = ["All", ...CATS];
+  chipsEl.innerHTML = all.map(c =>
+    `<span class="chip${c===activeCat?' active':''}" data-cat="${c}">${c}${c==="All" ? ` (${DATA.length})` : ` (${DATA.filter(d=>d.cat===c).length})`}</span>`
+  ).join('');
+  chipsEl.querySelectorAll('.chip').forEach(el=>{
+    el.addEventListener('click', () => {
+      activeCat = el.dataset.cat;
+      renderChips();
+      render();
+    });
+  });
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+function render(){
+  const q = query.trim().toLowerCase();
+  const filtered = DATA.filter(d => {
+    const matchesCat = activeCat === "All" || d.cat === activeCat;
+    const matchesQuery = !q || (d.name + " " + d.desc + " " + d.repo + " " + d.cat).toLowerCase().includes(q);
+    return matchesCat && matchesQuery;
+  });
+
+  countEl.textContent = `${filtered.length} project${filtered.length===1?'':'s'}`;
+
+  if(filtered.length === 0){
+    resultsEl.innerHTML = "";
+    emptyEl.style.display = "block";
+    return;
+  }
+  emptyEl.style.display = "none";
+
+  const byCat = {};
+  filtered.forEach(d => { (byCat[d.cat] = byCat[d.cat] || []).push(d); });
+
+  const catOrder = CATS.filter(c => byCat[c]);
+
+  resultsEl.innerHTML = catOrder.map(cat => `
+    <div class="category">
+      <h2 class="category-title">${escapeHtml(cat)} <span style="font-weight:400;">— ${byCat[cat].length}</span></h2>
+      <div class="grid">
+        ${byCat[cat].map(d => `
+          <a class="card" href="${d.url}" target="_blank" rel="noopener">
+            <div class="card-top">
+              <span class="card-name">${escapeHtml(d.name)}</span>
+              <span class="card-arrow">↗</span>
+            </div>
+            <span class="card-desc">${escapeHtml(d.desc)}</span>
+            <span class="card-repo">${escapeHtml(d.repo)}</span>
+          </a>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+searchEl.addEventListener('input', (e) => {
+  query = e.target.value;
+  render();
+});
+
+renderChips();
+render();
+</script>
+</body>
+</html>
