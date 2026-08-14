@@ -20,6 +20,7 @@ Compiled August 2026. Inspired by the idea behind [ashishpatel26/500-AI-Agents-P
 - [Marketing, SEO & Content](#marketing-seo--content)
 - [Personal Productivity & Assistants](#personal-productivity--assistants)
 - [Research & Data Analysis](#research--data-analysis)
+- [Cybersecurity & SRE Agents](#cybersecurity--sre-agents)
 - [Awesome Lists (Meta)](#awesome-lists-meta)
 
 ---
@@ -134,6 +135,18 @@ Agents that write, review, or ship code autonomously.
 | Open Deep Research | Open-source clone of "deep research" agents: reasons over large amounts of web data extracted with Firecrawl. | [nickscamara/open-deep-research](https://github.com/nickscamara/open-deep-research) |
 | Awesome AI Agents (Jenqyang) | Collection of autonomous, LLM-powered agents spanning research, coding, and productivity. | [Jenqyang/Awesome-AI-Agents](https://github.com/Jenqyang/Awesome-AI-Agents) |
 | AI Research SKILLs | Open-source library of research and engineering skills that turn any coding agent into an AI research agent. | [orchestra-research/AI-research-SKILLs](https://github.com/orchestra-research/AI-research-SKILLs) |
+
+## Cybersecurity & SRE Agents
+
+Agents for security testing, incident response, and site reliability.
+
+| Project | Description | Link |
+|---|---|---|
+| Strix | Open-source AI penetration testing agent that autonomously finds and validates application vulnerabilities with real exploits. | [usestrix/strix](https://github.com/usestrix/strix) |
+| PentAGI | Fully autonomous AI agent system for performing complex, multi-step penetration testing engagements. | [vxcontrol/pentagi](https://github.com/vxcontrol/pentagi) |
+| OpenSRE | Open-source toolkit for building your own AI SRE agents for automated incident investigation. | [Tracer-Cloud/opensre](https://github.com/Tracer-Cloud/opensre) |
+| AI SOC | Open-source, AI-augmented Security Operations Center combining LLMs, multi-agent orchestration, Wazuh, and TheHive. | [zhadyz/AI_SOC](https://github.com/zhadyz/AI_SOC) |
+| Awesome AI SRE | Curated list of 100+ AI-powered SRE tools and agents: incident management, observability, AIOps, chaos engineering. | [agamm/awesome-ai-sre](https://github.com/agamm/awesome-ai-sre) |
 
 ## Awesome Lists (Meta)
 
