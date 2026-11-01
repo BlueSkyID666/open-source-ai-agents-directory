@@ -127,6 +127,7 @@ Agents that write, review, or ship code autonomously.
 |---|---|---|
 | Open Personal Agent | First open-sourced fully personalized agent framework. | [NevaMind-AI/open-personal-agent](https://github.com/NevaMind-AI/open-personal-agent) |
 | GAIA | Proactive personal AI assistant and companion for daily productivity. | [theexperiencecompany/gaia](https://github.com/theexperiencecompany/gaia) |
+| Orkas | MIT-licensed, local-first desktop workspace where a Commander coordinates specialist agents to turn project files into reports, presentations and media. | [Orkas-AI/Orkas](https://github.com/Orkas-AI/Orkas) |
 
 ## Research & Data Analysis
 
